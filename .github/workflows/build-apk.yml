@@ -28,7 +28,10 @@ jobs:
           gradle-version: '8.9'
 
       - name: Instalar Android 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -1)
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Compilar APK instalable
         run: gradle :app:assembleDebug --no-daemon --stacktrace
